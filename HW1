@@ -1,0 +1,18 @@
+nTm(Mr,Ml,Wl,Halt,In,Out):-nTm2(Mr,Ml,Wl,Halt,q0,[b-k],In,Out).
+
+nTm2(_,_,_,Halt,Q0,Left,[Hr|Tr],Out):-member([Q0,Hr], Halt), reverse(Left,LeftR),
+                                      append(LeftR,[Hr|Tr], Tape), processTape(Out,Tape).
+nTm2(Mr,Ml,Wl,Halt,Q0,[],R,Out):- nTm2(Mr,Ml,Wl,Halt,Q0,[b-k],R,Out).
+nTm2(Mr,Ml,Wl,Halt,Q0,L,[],Out):- nTm2(Mr,Ml,Wl,Halt,Q0,L,[b-k],Out).
+nTm2(Mr,Ml,Wl,Halt,Q0,[Hl|Tl],[Hr|Tr],Out):-member([Q0,Hr,X,Q1],Wl), nTm2(Mr,Ml,Wl,Halt,Q1,[Hl|Tl],[X|Tr],Out);
+                                            member([Q0,Hr,Q1],Mr), nTm2(Mr,Ml,Wl,Halt,Q1,[Hr,Hl|Tl],Tr,Out);
+                                            member([Q0,Hr,Q1],Ml), nTm2(Mr,Ml,Wl,Halt,Q1,Tl,[Hl,Hr|Tr],Out).
+
+processTape([],[]).
+processTape(Ti,[b-k|To]):-processTape(Ti,To),!.
+processTape(Ti,To):-writeTape(Ti,To).
+writeTape([],[]).
+writeTape([],[b-k|To]):- endTape(To),!.
+writeTape([Ho|Ti],[Ho|To]):-writeTape(Ti,To).
+endTape([]).
+endTape([b-k|T]):-endTape(T).
